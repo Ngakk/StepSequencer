@@ -1,5 +1,5 @@
 {
-  "name": "com.ngak.StepSequencer",
+  "name": "com.ngak.stepsequencer",
   "version": "1.0.0",
   "displayName": "Step Sequencer",
   "description": "Base scripts to help create sequences that check for conditions to continue, tutorial style.",
