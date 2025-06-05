@@ -1,37 +1,37 @@
 using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace StepSequencer
 {
     [System.Serializable]
-    public class Sequencer
+    public class Sequencer : SerializedMonoBehaviour
     {
         //The steps to take, ordered
-        [SerializeField] Step[] steps;
-
-        private Stack<Step> stepStack; //Next steps
-        private Stack<Step> undoStack; //Stores current previous step and all other done steps
+        [SerializeField] IStep[] steps;
+        
+        private Stack<IStep> stepStack; //Next steps
+        private Stack<IStep> undoStack; //Stores current previous step and all other done steps
 
         public delegate void SequencerEventHandler();
         
         public event SequencerEventHandler Started;
         public event SequencerEventHandler Completed;
         
-        
         public Status CurrentStatus { get; private set; } = Status.Idle;
-        private Step CurrentStep => stepStack.Count > 0 ? stepStack.Peek() : null;
-        private Step PreviousStep => undoStack.Count > 0 ? undoStack.Peek() : null;
-
+        private IStep CurrentStep => stepStack.Count > 0 ? stepStack.Peek() : null;
+        private IStep PreviousStep => undoStack.Count > 0 ? undoStack.Peek() : null;
 
         public void StartSequence()
         {
-            stepStack = new Stack<Step>(steps.Length);
-            undoStack = new Stack<Step>(steps.Length);
+            stepStack = new Stack<IStep>(steps.Length);
+            undoStack = new Stack<IStep>(steps.Length);
 
             for (int i = steps.Length - 1; i >= 0; i--)
             {
-                stepStack.Push(steps[i]);
+                stepStack.Push(steps[i] as IStep);
             }
             
             CurrentStatus = Status.Running;
@@ -79,7 +79,7 @@ namespace StepSequencer
             if (PreviousStep != null)
             {
                 PreviousStep.gameObject.SetActive(true);
-                PreviousStep.SetEvaluationMode(Step.EvaluationMode.Backward);
+                PreviousStep.SetEvaluationMode(StepEvaluationMode.Backward);
                 PreviousStep.Undone += MoveToPreviousStep;
             }
 
@@ -87,7 +87,7 @@ namespace StepSequencer
             {
                 //Prepare next step and start
                 CurrentStep.gameObject.SetActive(true);
-                CurrentStep.SetEvaluationMode(Step.EvaluationMode.Forward);
+                CurrentStep.SetEvaluationMode(StepEvaluationMode.Forward);
                 CurrentStep.Completed += MoveToNextStep;
             }
         }
@@ -101,7 +101,7 @@ namespace StepSequencer
             if (PreviousStep != null)
             {
                 PreviousStep.gameObject.SetActive(false);
-                PreviousStep.SetEvaluationMode(Step.EvaluationMode.None);
+                PreviousStep.SetEvaluationMode(StepEvaluationMode.None);
                 PreviousStep.Undone -= MoveToPreviousStep;
             }
 
@@ -109,7 +109,7 @@ namespace StepSequencer
             if (CurrentStep != null)
             {
                 CurrentStep.gameObject.SetActive(false);
-                CurrentStep.SetEvaluationMode(Step.EvaluationMode.None);
+                CurrentStep.SetEvaluationMode(StepEvaluationMode.None);
                 CurrentStep.Completed -= MoveToNextStep;
             }
         }

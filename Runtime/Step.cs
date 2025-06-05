@@ -2,25 +2,38 @@ using UnityEngine;
 
 namespace StepSequencer
 {
-    public class Step : MonoBehaviour
+    public class Step : MonoBehaviour, IStep
     {
         #region Variables
-        
-        protected EvaluationMode evaluationMode;
-        
-        public delegate void StepEventHandler();
-
+        protected StepEvaluationMode m_evaluationMode;
         public event StepEventHandler Completed;
         public event StepEventHandler Undone;
         #endregion
         
-        #region Methods
+        #region Monobehaviors
 
-        public void SetEvaluationMode(EvaluationMode evaluationMode)
+        void Update()
         {
-            this.evaluationMode = evaluationMode;
+            switch (m_evaluationMode)
+            {
+                case StepEvaluationMode.Forward:
+                    CompleteCheckUpdate();
+                    break;
+                case StepEvaluationMode.Backward:
+                    UndoneCheckUpdate();
+                    break;
+                case StepEvaluationMode.None:
+                    return;
+            }
         }
+        #endregion
         
+        #region Methods
+        public void SetEvaluationMode(StepEvaluationMode stepEvaluationMode)
+        {
+            m_evaluationMode = stepEvaluationMode;
+        }
+
         protected void OnCompleted()
         {
             Completed?.Invoke();
@@ -30,13 +43,27 @@ namespace StepSequencer
         {
             Undone?.Invoke();
         }
-        #endregion
+
+        protected virtual void CompleteCheckUpdate() { }
         
-        public enum EvaluationMode
-        {
-            None,
-            Forward,
-            Backward,
-        }
+        protected virtual void UndoneCheckUpdate() { }
+        #endregion
+    }
+    public delegate void StepEventHandler();
+
+    public enum StepEvaluationMode
+    {
+        None,
+        Forward,
+        Backward,
+    }
+    
+    public interface IStep
+    {
+        event StepEventHandler Completed;
+        event StepEventHandler Undone;
+
+        void SetEvaluationMode(StepEvaluationMode mode);
+        GameObject gameObject { get; }
     }
 }
