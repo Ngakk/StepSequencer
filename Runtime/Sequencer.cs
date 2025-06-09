@@ -24,6 +24,7 @@ namespace StepSequencer
         private IStep CurrentStep => stepStack.Count > 0 ? stepStack.Peek() : null;
         private IStep PreviousStep => undoStack.Count > 0 ? undoStack.Peek() : null;
 
+        [ContextMenu("Start")]
         public void StartSequence()
         {
             stepStack = new Stack<IStep>(steps.Length);
@@ -32,11 +33,15 @@ namespace StepSequencer
             for (int i = steps.Length - 1; i >= 0; i--)
             {
                 stepStack.Push(steps[i] as IStep);
+                stepStack.Peek().SetEvaluationMode(StepEvaluationMode.Forward);
             }
             
             CurrentStatus = Status.Running;
+            
+            Debug.Log("[seq] Starting sequence");
             Started?.Invoke();
-            MoveToNextStep();
+            
+            InitializeSteps();
         }
 
         private void MoveToNextStep()
@@ -47,6 +52,7 @@ namespace StepSequencer
             if (stepStack.Count == 0)
             {
                 CurrentStatus = Status.Completed;
+                Debug.Log("[seq] Completed sequence");
                 Completed?.Invoke();
                 return;
             }
@@ -57,6 +63,18 @@ namespace StepSequencer
             InitializeSteps();
         }
 
+        private void OnStepUndone(object sender, StepEventArgs e)
+        {
+            Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=red>undone</color>");
+            MoveToPreviousStep();
+        }
+        
+        private void OnStepCompleted(object sender, StepEventArgs e)
+        {
+            Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=green>completed</color>");
+            MoveToNextStep();
+        }
+        
         private void MoveToPreviousStep()
         {
             CleanupSteps();
@@ -80,7 +98,7 @@ namespace StepSequencer
             {
                 PreviousStep.gameObject.SetActive(true);
                 PreviousStep.SetEvaluationMode(StepEvaluationMode.Backward);
-                PreviousStep.Undone += MoveToPreviousStep;
+                PreviousStep.Undone += OnStepUndone;
             }
 
             if (CurrentStep != null)
@@ -88,7 +106,7 @@ namespace StepSequencer
                 //Prepare next step and start
                 CurrentStep.gameObject.SetActive(true);
                 CurrentStep.SetEvaluationMode(StepEvaluationMode.Forward);
-                CurrentStep.Completed += MoveToNextStep;
+                CurrentStep.Completed += OnStepCompleted;
             }
         }
         
@@ -102,7 +120,7 @@ namespace StepSequencer
             {
                 PreviousStep.gameObject.SetActive(false);
                 PreviousStep.SetEvaluationMode(StepEvaluationMode.None);
-                PreviousStep.Undone -= MoveToPreviousStep;
+                PreviousStep.Undone -= OnStepUndone;
             }
 
             //End current step
@@ -110,7 +128,7 @@ namespace StepSequencer
             {
                 CurrentStep.gameObject.SetActive(false);
                 CurrentStep.SetEvaluationMode(StepEvaluationMode.None);
-                CurrentStep.Completed -= MoveToNextStep;
+                CurrentStep.Completed -= OnStepCompleted;
             }
         }
 

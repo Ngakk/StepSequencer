@@ -1,8 +1,10 @@
+using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace StepSequencer
 {
-    public class Step : MonoBehaviour, IStep
+    public class Step : SerializedMonoBehaviour, IStep
     {
         #region Variables
         protected StepEvaluationMode m_evaluationMode;
@@ -29,19 +31,19 @@ namespace StepSequencer
         #endregion
         
         #region Methods
-        public void SetEvaluationMode(StepEvaluationMode stepEvaluationMode)
+        public virtual void SetEvaluationMode(StepEvaluationMode stepEvaluationMode)
         {
             m_evaluationMode = stepEvaluationMode;
         }
 
-        protected void OnCompleted()
+        protected void Complete()
         {
-            Completed?.Invoke();
+            Completed?.Invoke(this, new StepEventArgs(this));
         }
 
-        protected void OnUndone()
+        protected void Undo()
         {
-            Undone?.Invoke();
+            Undone?.Invoke(this , new StepEventArgs(this));
         }
 
         protected virtual void CompleteCheckUpdate() { }
@@ -49,7 +51,17 @@ namespace StepSequencer
         protected virtual void UndoneCheckUpdate() { }
         #endregion
     }
-    public delegate void StepEventHandler();
+    public delegate void StepEventHandler(object sender, StepEventArgs args);
+
+    public class StepEventArgs : EventArgs
+    {
+        public IStep Step { get; private set; }
+
+        public StepEventArgs(IStep step)
+        {
+            Step = step;
+        }
+    }
 
     public enum StepEvaluationMode
     {
