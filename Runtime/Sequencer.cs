@@ -19,6 +19,9 @@ namespace StepSequencer
         
         public event SequencerEventHandler Started;
         public event SequencerEventHandler Completed;
+        public event StepEventHandler StepStarted;
+        public event StepEventHandler StepCompleted;
+        public event StepEventHandler StepUndone;
         
         public Status CurrentStatus { get; private set; } = Status.Idle;
         private IStep CurrentStep => stepStack.Count > 0 ? stepStack.Peek() : null;
@@ -62,16 +65,18 @@ namespace StepSequencer
 
             InitializeSteps();
         }
-
+        
         private void OnStepUndone(object sender, StepEventArgs e)
         {
             Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=red>undone</color>");
+            StepUndone?.Invoke(sender, e);
             MoveToPreviousStep();
         }
         
         private void OnStepCompleted(object sender, StepEventArgs e)
         {
             Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=green>completed</color>");
+            StepCompleted?.Invoke(sender, e);
             MoveToNextStep();
         }
         
@@ -96,16 +101,17 @@ namespace StepSequencer
             //Make current step into a previous step
             if (PreviousStep != null)
             {
-                PreviousStep.gameObject.SetActive(true);
                 PreviousStep.SetEvaluationMode(StepEvaluationMode.Backward);
+                PreviousStep.gameObject.SetActive(true);
                 PreviousStep.Undone += OnStepUndone;
             }
 
             if (CurrentStep != null)
             {
                 //Prepare next step and start
-                CurrentStep.gameObject.SetActive(true);
                 CurrentStep.SetEvaluationMode(StepEvaluationMode.Forward);
+                StepStarted?.Invoke(CurrentStep.gameObject, new StepEventArgs(CurrentStep));
+                CurrentStep.gameObject.SetActive(true);
                 CurrentStep.Completed += OnStepCompleted;
             }
         }

@@ -8,12 +8,19 @@ namespace StepSequencer
     {
         #region Variables
         protected StepEvaluationMode m_evaluationMode;
+        public event StepEventHandler Started;
         public event StepEventHandler Completed;
         public event StepEventHandler Undone;
         #endregion
         
         #region Monobehaviors
 
+        protected virtual void OnEnable()
+        {
+            if(m_evaluationMode == StepEvaluationMode.Forward)
+                Started?.Invoke(this , new StepEventArgs(this));
+        }
+        
         void Update()
         {
             switch (m_evaluationMode)
@@ -72,6 +79,7 @@ namespace StepSequencer
     
     public interface IStep
     {
+        event StepEventHandler Started; //Only called when on forward evaluation
         event StepEventHandler Completed;
         event StepEventHandler Undone;
 
