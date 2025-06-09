@@ -24,7 +24,7 @@ namespace StepSequencer
         private IStep CurrentStep => stepStack.Count > 0 ? stepStack.Peek() : null;
         private IStep PreviousStep => undoStack.Count > 0 ? undoStack.Peek() : null;
 
-        [ContextMenu("Start")]
+        [Button("Start")]
         public void StartSequence()
         {
             stepStack = new Stack<IStep>(steps.Length);
