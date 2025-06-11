@@ -7,11 +7,11 @@ namespace StepSequencer
 {
     public class StepEventHook : StepAddonBase
     {
-        [ToggleGroup("Step events")]
+        [FoldoutGroup("Step events")]
         [SerializeField] private UnityEvent<IStep> stepStarted;
-        [ToggleGroup("Step events")]
+        [FoldoutGroup("Step events")]
         [SerializeField] private UnityEvent<IStep> stepCompleted;
-        [ToggleGroup("Step events")]
+        [FoldoutGroup("Step events")]
         [SerializeField] private UnityEvent<IStep> stepUndone;
 
         protected override void StepOnStarted(object sender, StepEventArgs args) => stepStarted?.Invoke(args.Step);

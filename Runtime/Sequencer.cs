@@ -72,19 +72,17 @@ namespace StepSequencer
         private void MoveToNextStep()
         {
             CleanupSteps();
-
-            //Check if there are still steps
-            if (stepStack.Count == 0)
-            {
-                CurrentStatus = Status.Completed;
-                Debug.Log("[seq] Completed sequence");
-                Completed?.Invoke();
-                return;
-            }
             
             //Move next
             undoStack.Push(stepStack.Pop());
 
+            //Check if there are still steps
+            if (stepStack.Count == 0)
+            {
+                Finish();
+                return;
+            }
+            
             InitializeSteps();
         }
         
@@ -176,6 +174,15 @@ namespace StepSequencer
             }
         }
 
+        private void Finish()
+        {
+            CurrentStatus = Status.Completed;
+            Debug.Log("[seq] Completed sequence");
+                
+            CleanupSteps();
+                
+            Completed?.Invoke();
+        }
         /// <summary>
         /// Represents the status of the Sequencer.
         /// </summary>
