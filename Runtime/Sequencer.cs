@@ -6,15 +6,22 @@ using Object = UnityEngine.Object;
 
 namespace StepSequencer
 {
+    /// <summary>
+    /// Main class responsible for managing the sequence of steps.
+    /// </summary>
     [System.Serializable]
+    
     public class Sequencer : SerializedMonoBehaviour
     {
-        //The steps to take, ordered
-        [SerializeField] IStep[] steps;
+        [Tooltip("The steps to take, ordered")]
+        [SerializeField] private IStep[] steps;
         
         private Stack<IStep> stepStack; //Next steps
         private Stack<IStep> undoStack; //Stores current previous step and all other done steps
 
+        /// <summary>
+        /// Class to handle events thrown by the Sequencer.
+        /// </summary>
         public delegate void SequencerEventHandler();
         
         public event SequencerEventHandler Started;
@@ -23,10 +30,22 @@ namespace StepSequencer
         public event StepEventHandler StepCompleted;
         public event StepEventHandler StepUndone;
         
+        /// <summary>
+        /// Current status of the sequencer.
+        /// </summary>
         public Status CurrentStatus { get; private set; } = Status.Idle;
+        /// <summary>
+        /// The step that is currently active in the sequence.
+        /// </summary>
         private IStep CurrentStep => stepStack.Count > 0 ? stepStack.Peek() : null;
+        /// <summary>
+        /// The step that was previously active before the current step.
+        /// </summary>
         private IStep PreviousStep => undoStack.Count > 0 ? undoStack.Peek() : null;
 
+        /// <summary>
+        /// Begins the entire sequence of steps.
+        /// </summary>
         [Button("Start")]
         public void StartSequence()
         {
@@ -47,6 +66,9 @@ namespace StepSequencer
             InitializeSteps();
         }
 
+        /// <summary>
+        /// Advances the sequencer to the next step.
+        /// </summary>
         private void MoveToNextStep()
         {
             CleanupSteps();
@@ -66,6 +88,11 @@ namespace StepSequencer
             InitializeSteps();
         }
         
+        /// <summary>
+        /// Handles the event when a step is undone.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments containing step details.</param>
         private void OnStepUndone(object sender, StepEventArgs e)
         {
             Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=red>undone</color>");
@@ -73,6 +100,11 @@ namespace StepSequencer
             MoveToPreviousStep();
         }
         
+        /// <summary>
+        /// Handles the event when a step is completed.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">Event arguments containing step details.</param>
         private void OnStepCompleted(object sender, StepEventArgs e)
         {
             Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=green>completed</color>");
@@ -80,6 +112,9 @@ namespace StepSequencer
             MoveToNextStep();
         }
         
+        /// <summary>
+        /// Moves the sequencer to the previous step in the sequence.
+        /// </summary>
         private void MoveToPreviousStep()
         {
             CleanupSteps();
@@ -96,6 +131,9 @@ namespace StepSequencer
             InitializeSteps();
         }
 
+        /// <summary>
+        /// Sets up and initializes all steps in the sequence.
+        /// </summary>
         private void InitializeSteps()
         {
             //Make current step into a previous step
@@ -117,7 +155,7 @@ namespace StepSequencer
         }
         
         /// <summary>
-        /// Unsubscribes and resets settings of current and previous step
+        /// Cleans up any resources or references related to the sequence steps.
         /// </summary>
         private void CleanupSteps()
         {
@@ -138,6 +176,9 @@ namespace StepSequencer
             }
         }
 
+        /// <summary>
+        /// Represents the status of the Sequencer.
+        /// </summary>
         public enum Status
         {
             Idle,
