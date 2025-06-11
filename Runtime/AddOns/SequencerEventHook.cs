@@ -19,19 +19,27 @@ namespace StepSequencer
 
         protected override void SequencerOnStepStarted(object sender, StepEventArgs args)
         {
-            
+            stepStarted?.Invoke();   
         }
         
         protected override void SequencerOnStepUndone(object sender, StepEventArgs args)
         {
-            
+            stepUndone?.Invoke();
         }
 
         protected override void SequencerOnStepCompleted(object sender, StepEventArgs args)
         {
-            
+            stepCompleted?.Invoke();
         }
 
-        
+        protected override void SequencerOnCompleted()
+        {
+            sequenceCompleted?.Invoke();
+        }
+
+        protected override void SequencerOnStarted()
+        {
+            sequenceStarted?.Invoke();
+        }
     }
 }
