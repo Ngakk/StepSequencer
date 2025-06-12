@@ -60,7 +60,6 @@ namespace StepSequencer
             
             CurrentStatus = Status.Running;
             
-            Debug.Log("[seq] Starting sequence");
             Started?.Invoke();
             
             InitializeSteps();
@@ -93,7 +92,6 @@ namespace StepSequencer
         /// <param name="e">Event arguments containing step details.</param>
         private void OnStepUndone(object sender, StepEventArgs e)
         {
-            Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=red>undone</color>");
             StepUndone?.Invoke(sender, e);
             MoveToPreviousStep();
         }
@@ -105,7 +103,6 @@ namespace StepSequencer
         /// <param name="e">Event arguments containing step details.</param>
         private void OnStepCompleted(object sender, StepEventArgs e)
         {
-            Debug.Log($"[seq] Step {e.Step.gameObject.name} was <color=green>completed</color>");
             StepCompleted?.Invoke(sender, e);
             MoveToNextStep();
         }
@@ -177,7 +174,6 @@ namespace StepSequencer
         private void Finish()
         {
             CurrentStatus = Status.Completed;
-            Debug.Log("[seq] Completed sequence");
                 
             CleanupSteps();
                 

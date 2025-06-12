@@ -13,3 +13,7 @@
  
 1.0.5
  - Fixed multistep backward evaluation 
+ 
+1.0.6
+ - Fixed multistep backward evaluation for real this time
+ - Removed some debug logs
