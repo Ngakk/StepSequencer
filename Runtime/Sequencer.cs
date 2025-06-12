@@ -81,6 +81,12 @@ namespace StepSequencer
             }
             
             InitializeSteps();
+
+            //Immediately skip if it's already completed
+            if (CurrentStep.IsCompleted)
+            {
+                OnStepCompleted(this, new StepEventArgs(CurrentStep));
+            }
         }
         
         /// <summary>

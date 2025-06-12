@@ -21,3 +21,7 @@
 1.0.7
  - Multistep fix for real for real this time
  - Added some common steps for buttons and toggles
+
+1.0.8
+ - Multistep and sequencer take into account already completed steps upon starting the check
+ - Hopefuly fixed assembly problems

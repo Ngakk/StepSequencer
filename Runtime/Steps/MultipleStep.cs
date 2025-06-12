@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace StepSequencer
@@ -10,12 +8,6 @@ namespace StepSequencer
         //The steps to encapsulate
         [SerializeField] private Type type;
         [SerializeField] IStep[] steps;
-        
-        [ShowInInspector]
-        public int EvaluatedStepsCount => evaluatedSteps?.Count ?? 0;
-        
-        public event StepEventHandler Completed;
-        public event StepEventHandler Undone;
 
         private List<IStep> evaluatedSteps; //Always holds the completed steps
         
@@ -26,15 +18,18 @@ namespace StepSequencer
             evaluatedSteps = new List<IStep>();
             foreach (var step in steps)
             {
-                step.SetEvaluationMode(step.IsCompleted ? StepEvaluationMode.Backward : StepEvaluationMode.Forward);
-                step.gameObject.SetActive(true);
                 step.Completed += OnCompleted;
                 step.Undone += OnUndone;
-
-                if (step.IsCompleted)
-                    evaluatedSteps.Add(step);
                 
-            }    
+                step.SetEvaluationMode(step.IsCompleted ? StepEvaluationMode.Backward : StepEvaluationMode.Forward);
+                step.gameObject.SetActive(true);
+                
+                if(step.IsCompleted)
+                    evaluatedSteps.Add(step);
+            }
+            
+            if(type is Type.All && evaluatedSteps.Count == steps.Length || type is Type.Any && evaluatedSteps.Count > 0)
+                IsCompleted = true;
         }
         
         private void OnDisable()

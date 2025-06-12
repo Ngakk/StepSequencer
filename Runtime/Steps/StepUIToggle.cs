@@ -11,7 +11,9 @@ namespace StepSequencer
         protected override void OnEnable()
         {
             base.OnEnable();
-            
+
+            IsCompleted = toggle.isOn == checkForOn;
+
             toggle.onValueChanged.AddListener(OnValueChanged);
         }
 
@@ -22,11 +24,11 @@ namespace StepSequencer
 
         void OnValueChanged(bool value)
         {
-            if (m_evaluationMode == StepEvaluationMode.Forward && checkForOn)
+            if (m_evaluationMode == StepEvaluationMode.Forward && checkForOn == value)
             {
                 Complete();
             }
-            else if (m_evaluationMode == StepEvaluationMode.Backward && !checkForOn)
+            else if (m_evaluationMode == StepEvaluationMode.Backward && checkForOn != value)
             {
                 Undo();
             }
