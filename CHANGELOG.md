@@ -10,3 +10,6 @@
   
 1.0.4
  - Fixed sequencer and it's event hook component
+ 
+1.0.5
+ - Fixed multistep backward evaluation 

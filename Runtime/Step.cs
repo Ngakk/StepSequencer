@@ -12,6 +12,8 @@ namespace StepSequencer
         public event StepEventHandler Completed;
         public event StepEventHandler Undone;
         #endregion
+
+        public bool IsCompleted { get; protected set; }
         
         #region Monobehaviors
 
@@ -51,11 +53,13 @@ namespace StepSequencer
 
         protected void Complete()
         {
+            IsCompleted = true;
             Completed?.Invoke(this, new StepEventArgs(this));
         }
 
         protected void Undo()
         {
+            IsCompleted = false;
             Undone?.Invoke(this , new StepEventArgs(this));
         }
 
@@ -91,5 +95,6 @@ namespace StepSequencer
 
         void SetEvaluationMode(StepEvaluationMode mode);
         GameObject gameObject { get; }
+        bool IsCompleted { get; }
     }
 }

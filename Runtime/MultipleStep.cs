@@ -20,8 +20,9 @@ namespace StepSequencer
         private List<IStep> evaluatedSteps;
         
         #region Monobehaviour
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
             Debug.Log("MultipleStep OnEnable");
             evaluatedSteps = new List<IStep>();
             foreach (var step in steps)
@@ -30,6 +31,10 @@ namespace StepSequencer
                 step.gameObject.SetActive(true);
                 step.Completed += OnCompleted;
                 step.Undone += OnUndone;
+                
+                //Non completed steps are the same as undone, therefore they can be counted as evaluated
+                if(m_evaluationMode == StepEvaluationMode.Backward && !step.IsCompleted) 
+                    evaluatedSteps.Add(step);
             }    
         }
         
