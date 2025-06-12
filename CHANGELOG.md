@@ -17,3 +17,7 @@
 1.0.6
  - Fixed multistep backward evaluation for real this time
  - Removed some debug logs
+
+1.0.7
+ - Multistep fix for real for real this time
+ - Added some common steps for buttons and toggles

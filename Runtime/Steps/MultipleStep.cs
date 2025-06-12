@@ -26,13 +26,14 @@ namespace StepSequencer
             evaluatedSteps = new List<IStep>();
             foreach (var step in steps)
             {
-                step.SetEvaluationMode(m_evaluationMode);
+                step.SetEvaluationMode(step.IsCompleted ? StepEvaluationMode.Backward : StepEvaluationMode.Forward);
                 step.gameObject.SetActive(true);
                 step.Completed += OnCompleted;
                 step.Undone += OnUndone;
-                
-                if(step.IsCompleted) 
+
+                if (step.IsCompleted)
                     evaluatedSteps.Add(step);
+                
             }    
         }
         
@@ -67,7 +68,7 @@ namespace StepSequencer
             e.Step.gameObject.SetActive(true);
             
             evaluatedSteps.Remove(e.Step);
-
+            
             if (m_evaluationMode != StepEvaluationMode.Backward) return; //Can't undo if not backward evaluation
             
             if(type is Type.All || (type is Type.Any && evaluatedSteps.Count == 0))
@@ -83,7 +84,7 @@ namespace StepSequencer
             
             if (!evaluatedSteps.Contains(e.Step))
                 evaluatedSteps.Add(e.Step);
-
+            
             if (m_evaluationMode != StepEvaluationMode.Forward) return; //can't complete if not forward evaluation
             
             if(type is Type.Any || (type is Type.All && evaluatedSteps.Count == steps.Length))
