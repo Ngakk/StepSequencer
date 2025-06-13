@@ -13,7 +13,7 @@ namespace StepSequencer
         public event StepEventHandler Undone;
         #endregion
 
-        public bool IsCompleted { get; protected set; }
+        public virtual bool IsCompleted { get; protected set; }
         
         #region Monobehaviors
 

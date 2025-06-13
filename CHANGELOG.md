@@ -25,3 +25,8 @@
 1.0.8
  - Multistep and sequencer take into account already completed steps upon starting the check
  - Hopefuly fixed assembly problems
+
+1.0.9
+ - Step code improvements
+ - StepUIToggle fixes
+ - Added sequencer logger component

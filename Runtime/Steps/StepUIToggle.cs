@@ -7,12 +7,12 @@ namespace StepSequencer
     {
         [SerializeField] private Toggle toggle;
         [SerializeField] private bool checkForOn = true;
+
+        public override bool IsCompleted { get => toggle.isOn == checkForOn; protected set => _ = value; }
         
         protected override void OnEnable()
         {
             base.OnEnable();
-
-            IsCompleted = toggle.isOn == checkForOn;
 
             toggle.onValueChanged.AddListener(OnValueChanged);
         }
