@@ -30,3 +30,7 @@
  - Step code improvements
  - StepUIToggle fixes
  - Added sequencer logger component
+ 
+1.0.10
+ - Added SFX related sequence and step addons
+ - Made base components abstract so that they can't be put in gameobjects 

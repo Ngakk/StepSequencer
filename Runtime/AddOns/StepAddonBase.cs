@@ -4,7 +4,7 @@ using UnityEngine;
 namespace StepSequencer
 {
     [RequireComponent(typeof(IStep))]
-    public class StepAddonBase : SerializedMonoBehaviour
+    public abstract class StepAddonBase : SerializedMonoBehaviour
     {
         [SerializeField] protected IStep step;
         
