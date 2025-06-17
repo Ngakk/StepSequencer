@@ -1,5 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
 
 namespace StepSequencer
@@ -44,7 +48,7 @@ namespace StepSequencer
         /// <summary>
         /// Begins the entire sequence of steps.
         /// </summary>
-        [Button("Start")]
+        [ShowIf("@UnityEngine.Application.isPlaying")][Button("Start")]
         public void StartSequence()
         {
             stepStack = new Stack<IStep>(steps.Length);
@@ -183,6 +187,55 @@ namespace StepSequencer
                 
             Completed?.Invoke();
         }
+
+#if UNITY_EDITOR
+        [Button]
+        public void RunStepSetup()
+        {
+            var childSteps = GetComponentsInChildren<IStep>(true);
+
+            if (childSteps.Length == 0) return;
+            
+            int undoID = UnityEditor.Undo.GetCurrentGroup();
+            UnityEditor.Undo.SetCurrentGroupName("Batch modifying steps");
+            UnityEditor.Undo.RecordObject(this, "Enumerate steps");
+            
+            steps = childSteps.ToArray();
+            
+            EnumerateChildren(transform, "", undoID);
+            
+            UnityEditor.Undo.CollapseUndoOperations(undoID);
+        }
+
+        private void EnumerateChildren(Transform parent, string prefix, int undoID)
+        {
+            string pattern = @"^(\d+(?:\.\d+)*)(?:\s+)(.+)";
+            int count = 0;
+
+            if(prefix == null) prefix = string.Empty;
+            
+            if (prefix != string.Empty)
+                prefix += ".";
+            
+            foreach (Transform child in parent)
+            {
+                string title = child.gameObject.name.Trim();
+                var match = Regex.Match(title, pattern);
+                if (match.Success)
+                {
+                    title = match.Groups[2].Value;
+                }
+                
+                UnityEditor.Undo.RecordObject(child.gameObject, "Step setup");
+                child.gameObject.name = $"{prefix}{count} {title}";
+                child.gameObject.SetActive(false);
+                
+                EnumerateChildren(child, prefix + count, undoID);
+                count++;
+            }
+        }
+#endif
+        
         /// <summary>
         /// Represents the status of the Sequencer.
         /// </summary>

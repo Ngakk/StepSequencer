@@ -33,4 +33,8 @@
  
 1.0.10
  - Added SFX related sequence and step addons
- - Made base components abstract so that they can't be put in gameobjects 
+ - Made base components abstract so that they can't be put in gameobjects
+ 
+1.1.0
+ - Improved sequencer inspector
+ - Added automatic preprocessing for steps and sequences upon scene save
