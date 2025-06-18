@@ -5,10 +5,10 @@ namespace StepSequencer
 {
     public class StepSFX : StepAddonBase
     {
-        [SerializeField] [Required] AudioSource audioSource;
-        [SerializeField] private AudioClip startedAudioClip;
-        [SerializeField] private AudioClip completedAudioClip;
-        [SerializeField] private AudioClip undoneAudioClip;
+        [SerializeField] [Required] protected AudioSource audioSource;
+        [SerializeField] protected AudioClip startedAudioClip;
+        [SerializeField] protected AudioClip completedAudioClip;
+        [SerializeField] protected AudioClip undoneAudioClip;
         
         protected override void StepOnStarted(object sender, StepEventArgs args)
         {

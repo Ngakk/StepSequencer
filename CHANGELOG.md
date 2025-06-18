@@ -38,3 +38,6 @@
 1.1.0
  - Improved sequencer inspector
  - Added automatic preprocessing for steps and sequences upon scene save
+
+1.1.1
+ - Changes sfx step to be easier to inherit and modify
