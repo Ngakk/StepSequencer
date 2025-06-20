@@ -41,3 +41,6 @@
 
 1.1.1
  - Changes sfx step to be easier to inherit and modify
+ 
+1.1.2
+ - Sequencer setup button renames children even if there are no steps

@@ -193,8 +193,6 @@ namespace StepSequencer
         public void RunStepSetup()
         {
             var childSteps = GetComponentsInChildren<IStep>(true);
-
-            if (childSteps.Length == 0) return;
             
             int undoID = UnityEditor.Undo.GetCurrentGroup();
             UnityEditor.Undo.SetCurrentGroupName("Batch modifying steps");
