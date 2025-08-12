@@ -11,8 +11,7 @@ namespace StepSequencer
         [OnInspectorInit]
         private void AssignReferences()
         {
-            if (step == null)
-                step = GetComponent<IStep>();
+            step = GetComponent<IStep>();
         }
 
         protected virtual void OnEnable()

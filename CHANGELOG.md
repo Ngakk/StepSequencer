@@ -44,3 +44,7 @@
  
 1.1.2
  - Sequencer setup button renames children even if there are no steps
+ 
+1.1.3
+ - Added animation step addon. 
+ - QoL fix for step addongs.
