@@ -48,3 +48,6 @@
 1.1.3
  - Added animation step addon. 
  - QoL fix for step addongs.
+
+1.1.4
+ - Added empty step. Useful for finishing steps through inspector unity events.
