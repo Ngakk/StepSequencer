@@ -51,3 +51,6 @@
 
 1.1.4
  - Added empty step. Useful for finishing steps through inspector unity events.
+ 
+1.2.0
+ - Added a "Can Undo" setting for the ability to control which step can or can't be undone

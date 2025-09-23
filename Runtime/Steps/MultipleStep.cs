@@ -8,8 +8,12 @@ namespace StepSequencer
         //The steps to encapsulate
         [SerializeField] private Type type;
         [SerializeField] IStep[] steps;
+        [SerializeField] private bool canUndo = true;
 
         private List<IStep> evaluatedSteps; //Always holds the completed steps
+        
+        public IEnumerable<IStep> Steps => steps;
+        public override bool CanUndo => canUndo;
         
         #region Monobehaviour
         protected override void OnEnable()

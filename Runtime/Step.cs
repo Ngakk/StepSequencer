@@ -14,7 +14,8 @@ namespace StepSequencer
         #endregion
 
         public virtual bool IsCompleted { get; protected set; }
-        
+        public virtual bool CanUndo => true;
+
         #region Monobehaviors
 
         protected virtual void OnEnable()
@@ -59,6 +60,8 @@ namespace StepSequencer
 
         protected void Undo()
         {
+            if (!CanUndo) return;
+            
             IsCompleted = false;
             Undone?.Invoke(this , new StepEventArgs(this));
         }
@@ -96,5 +99,6 @@ namespace StepSequencer
         void SetEvaluationMode(StepEvaluationMode mode);
         GameObject gameObject { get; }
         bool IsCompleted { get; }
+        bool CanUndo { get; }
     }
 }

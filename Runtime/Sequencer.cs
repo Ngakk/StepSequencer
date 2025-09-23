@@ -140,7 +140,7 @@ namespace StepSequencer
         private void InitializeSteps()
         {
             //Make current step into a previous step
-            if (PreviousStep != null)
+            if (PreviousStep is { CanUndo: true })
             {
                 PreviousStep.SetEvaluationMode(StepEvaluationMode.Backward);
                 PreviousStep.gameObject.SetActive(true);
@@ -192,12 +192,27 @@ namespace StepSequencer
         [Button]
         public void RunStepSetup()
         {
-            var childSteps = GetComponentsInChildren<IStep>(true);
+            var childSteps = GetComponentsInChildren<IStep>(true).ToList();
             
             int undoID = UnityEditor.Undo.GetCurrentGroup();
             UnityEditor.Undo.SetCurrentGroupName("Batch modifying steps");
             UnityEditor.Undo.RecordObject(this, "Enumerate steps");
             
+            //Checking that MultiStep's child steps are not in the list
+            List<IStep> stepsToRemove = new List<IStep>();
+            foreach(var s in childSteps)
+            {
+                if (s is MultipleStep multipleStep)
+                {
+                    stepsToRemove.AddRange(multipleStep.Steps);
+                }
+            }
+
+            foreach (var str in stepsToRemove)
+            {
+                childSteps.Remove(str);
+            }
+
             steps = childSteps.ToArray();
             
             EnumerateChildren(transform, "", undoID);
@@ -223,10 +238,13 @@ namespace StepSequencer
                 {
                     title = match.Groups[2].Value;
                 }
-                
+
                 UnityEditor.Undo.RecordObject(child.gameObject, "Step setup");
-                child.gameObject.name = $"{prefix}{count} {title}";
-                child.gameObject.SetActive(false);
+                if (child.gameObject.GetComponent<IStep>() != null)
+                {
+                    child.gameObject.name = $"{prefix}{count} {title}";
+                    child.gameObject.SetActive(false);
+                }
                 
                 EnumerateChildren(child, prefix + count, undoID);
                 count++;
