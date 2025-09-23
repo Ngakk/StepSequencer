@@ -54,3 +54,7 @@
  
 1.2.0
  - Added a "Can Undo" setting for the ability to control which step can or can't be undone
+ 
+1.2.1
+ - Improved step naming setup method. Now non-step objects can be made children of steps without getting numerated or deactivated.
+ - Temporal game objects that are not stes, still get numerated and deactivated.

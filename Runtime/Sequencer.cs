@@ -240,7 +240,7 @@ namespace StepSequencer
                 }
 
                 UnityEditor.Undo.RecordObject(child.gameObject, "Step setup");
-                if (child.gameObject.GetComponent<IStep>() != null)
+                if (child.gameObject.GetComponent<IStep>() != null || !IsChildOfStep(child))
                 {
                     child.gameObject.name = $"{prefix}{count} {title}";
                     child.gameObject.SetActive(false);
@@ -249,6 +249,22 @@ namespace StepSequencer
                 EnumerateChildren(child, prefix + count, undoID);
                 count++;
             }
+        }
+
+        private bool IsChildOfStep(Transform step)
+        {
+            Transform parent = step.parent;
+            while (parent != null)
+            {
+                if (parent.GetComponent<IStep>() != null)
+                    return true;
+                if (parent.GetComponent<Sequencer>() != null)
+                    return false;
+                
+                parent = parent.parent;
+            }
+
+            return false;
         }
 #endif
         
