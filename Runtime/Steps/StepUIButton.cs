@@ -13,7 +13,6 @@ namespace StepSequencer
         {
             base.OnEnable();
             
-            Debug.Log($"{gameObject.name}: Enabled. {m_evaluationMode}");
             if (m_evaluationMode == StepEvaluationMode.Forward)
                 completeButton.onClick.AddListener(Complete);
             else if(m_evaluationMode == StepEvaluationMode.Backward && undoButton != null)
@@ -23,7 +22,6 @@ namespace StepSequencer
 
         void OnDisable()
         {
-            Debug.Log($"{gameObject.name}: Disabled. {m_evaluationMode}");
             completeButton.onClick.RemoveListener(Complete);
             if(undoButton != null)
                 undoButton.onClick.RemoveListener(Undo);

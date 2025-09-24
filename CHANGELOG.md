@@ -58,3 +58,7 @@
 1.2.1
  - Improved step naming setup method. Now non-step objects can be made children of steps without getting numerated or deactivated.
  - Temporal game objects that are not stes, still get numerated and deactivated.
+ 
+1.2.2
+ - Non-step objects in sequencer hierarquy will stay active. Previously, steps would never start because the parent wasn't active.
+ - Removed some debug logs.
