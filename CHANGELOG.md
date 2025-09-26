@@ -62,3 +62,9 @@
 1.2.2
  - Non-step objects in sequencer hierarquy will stay active. Previously, steps would never start because the parent wasn't active.
  - Removed some debug logs.
+ 
+1.2.3
+ - Made it so StepUIButton shows and hides it's buttons as it starts and is completed
+ - StepUIButton is now not undoable if it doesn't have an interactable button assigned to the undo button variable
+ - Minor null check fixes
+ 

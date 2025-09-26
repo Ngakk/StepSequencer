@@ -204,7 +204,8 @@ namespace StepSequencer
             {
                 if (s is MultipleStep multipleStep)
                 {
-                    stepsToRemove.AddRange(multipleStep.Steps);
+                    if(multipleStep.Steps != null)
+                        stepsToRemove.AddRange(multipleStep.Steps);
                 }
             }
 
