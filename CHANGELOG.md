@@ -71,5 +71,5 @@
 1.2.4
  - Made it possible for sequences to be reused when calling StartSequence() again
  
-1.2.4.1
+1.2.5
  - Fixed multistep also being able to be reset
