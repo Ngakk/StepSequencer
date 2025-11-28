@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 using UnityEngine;
 
 namespace StepSequencer
@@ -56,8 +54,10 @@ namespace StepSequencer
 
             for (int i = steps.Length - 1; i >= 0; i--)
             {
-                stepStack.Push(steps[i] as IStep);
-                stepStack.Peek().SetEvaluationMode(StepEvaluationMode.Forward);
+                var step = steps[i] as IStep;
+                stepStack.Push(step);
+                step.Reset();
+                step.SetEvaluationMode(StepEvaluationMode.Forward);
             }
             
             CurrentStatus = Status.Running;

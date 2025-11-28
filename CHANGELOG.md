@@ -68,3 +68,5 @@
  - StepUIButton is now not undoable if it doesn't have an interactable button assigned to the undo button variable
  - Minor null check fixes
  
+1.2.4
+ - Made it possible for sequences to be reused when calling StartSequence() again

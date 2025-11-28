@@ -52,6 +52,11 @@ namespace StepSequencer
             m_evaluationMode = stepEvaluationMode;
         }
 
+        public void Reset()
+        {
+            IsCompleted = false;
+        }
+
         protected void Complete()
         {
             IsCompleted = true;
@@ -97,6 +102,7 @@ namespace StepSequencer
         event StepEventHandler Undone;
 
         void SetEvaluationMode(StepEvaluationMode mode);
+        void Reset();
         GameObject gameObject { get; }
         bool IsCompleted { get; }
         bool CanUndo { get; }
