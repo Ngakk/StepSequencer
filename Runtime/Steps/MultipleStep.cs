@@ -59,6 +59,16 @@ namespace StepSequencer
             }
         }
 
+        public override void Reset()
+        {
+            base.Reset();
+            
+            foreach (var step in steps) //Just forward the evaluation mode to all steps
+            {
+                step.Reset();
+            }
+        }
+
         private void OnUndone(object sender, StepEventArgs e)
         {
             //Need to start checking for step completion again, and reset the step by disabling/enabling

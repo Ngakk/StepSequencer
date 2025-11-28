@@ -52,7 +52,7 @@ namespace StepSequencer
             m_evaluationMode = stepEvaluationMode;
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             IsCompleted = false;
         }
