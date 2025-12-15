@@ -19,6 +19,8 @@ namespace StepSequencer
         private Stack<IStep> stepStack; //Next steps
         private Stack<IStep> undoStack; //Stores current previous step and all other done steps
 
+        public IEnumerable<IStep> Steps => steps;
+        
         /// <summary>
         /// Class to handle events thrown by the Sequencer.
         /// </summary>
@@ -202,10 +204,14 @@ namespace StepSequencer
             List<IStep> stepsToRemove = new List<IStep>();
             foreach(var s in childSteps)
             {
-                if (s is MultipleStep multipleStep)
+                if (s.gameObject == gameObject)
                 {
-                    if(multipleStep.Steps != null)
-                        stepsToRemove.AddRange(multipleStep.Steps);
+                    stepsToRemove.Add(s);
+                }
+                else if (s is IStepExcluder stepExcluder)
+                {
+                    if(stepExcluder.GetExclusions() != null)
+                        stepsToRemove.AddRange(stepExcluder.GetExclusions());
                 }
             }
 
@@ -216,7 +222,8 @@ namespace StepSequencer
 
             steps = childSteps.ToArray();
             
-            EnumerateChildren(transform, "", undoID);
+            if(GetComponent<SubSequencerStep>() == null) //Don't change names for subsequences
+                EnumerateChildren(transform, "", undoID);
             
             UnityEditor.Undo.CollapseUndoOperations(undoID);
         }
@@ -279,5 +286,10 @@ namespace StepSequencer
             Running,
             Completed,
         }
+    }
+
+    public interface IStepExcluder
+    {
+        IEnumerable<IStep> GetExclusions();
     }
 }

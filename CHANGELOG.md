@@ -73,3 +73,7 @@
  
 1.2.5
  - Fixed multistep also being able to be reset
+ 
+1.2.5
+ - Added a subsequencer step. Like the name suggest, this enables a nested sequencer to be treated as a step. Subsequencer steps are excluded from parent sequencer's list.
+ - Previously, the only way to exclude steps that where children of the sequencer, was to add the to a MultipleStep. An interface was added instead to enable the extension of this behaviour.

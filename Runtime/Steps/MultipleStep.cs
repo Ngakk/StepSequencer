@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace StepSequencer
 {
-    public class MultipleStep : Step
+    public class MultipleStep : Step, IStepExcluder
     {
         //The steps to encapsulate
         [SerializeField] private Type type;
@@ -104,6 +104,11 @@ namespace StepSequencer
         {
             All,
             Any
+        }
+
+        public IEnumerable<IStep> GetExclusions()
+        {
+            return steps;
         }
     }
 }
