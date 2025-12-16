@@ -88,9 +88,12 @@ namespace StepSequencer
         {
             //Need to start checking for step undo, and reset the step by disabling/enabling
             e.Step.gameObject.SetActive(false);
-            e.Step.SetEvaluationMode(StepEvaluationMode.Backward);
-            e.Step.gameObject.SetActive(true);
-            
+            if (e.Step.CanUndo)
+            {
+                e.Step.SetEvaluationMode(StepEvaluationMode.Backward);
+                e.Step.gameObject.SetActive(true);
+            }
+
             if (!evaluatedSteps.Contains(e.Step))
                 evaluatedSteps.Add(e.Step);
             
