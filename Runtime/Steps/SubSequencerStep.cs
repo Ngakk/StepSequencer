@@ -39,5 +39,12 @@ namespace StepSequencer
         {
             return sequencer.Steps;
         }
+        
+        #if UNITY_EDITOR
+        public void RunStepSetup()
+        {
+            sequencer.RunStepSetup();
+        }
+        #endif
     }
 }

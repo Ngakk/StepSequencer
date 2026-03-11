@@ -80,3 +80,6 @@
  
 1.2.7
  - Fixed MultiStep activating child steps that couldn't be undone for backward checking.
+ 
+1.2.8
+ - Subsequencers will now auto populate when parent sequencer does

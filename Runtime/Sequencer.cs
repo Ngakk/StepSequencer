@@ -210,8 +210,12 @@ namespace StepSequencer
                 }
                 else if (s is IStepExcluder stepExcluder)
                 {
+                    if (s is SubSequencerStep subSequencerStep)
+                        subSequencerStep.RunStepSetup();
+                    
                     if(stepExcluder.GetExclusions() != null)
                         stepsToRemove.AddRange(stepExcluder.GetExclusions());
+                   
                 }
             }
 
