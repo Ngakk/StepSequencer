@@ -83,3 +83,6 @@
  
 1.2.8
  - Subsequencers will now auto populate when parent sequencer does
+ 
+1.2.9
+ - Step Started event can be delayed and called manually if OnEnable is overriden.

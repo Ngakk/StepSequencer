@@ -21,7 +21,7 @@ namespace StepSequencer
         protected virtual void OnEnable()
         {
             if(m_evaluationMode == StepEvaluationMode.Forward)
-                Invoke(nameof(DelayerStart), 0f); //Wait for all other OnEnables to finish
+                Invoke(nameof(Start), 0f); //Wait for all other OnEnables to finish
         }
         
         void Update()
@@ -42,7 +42,7 @@ namespace StepSequencer
         
         #region Methods
 
-        private void DelayerStart()
+        protected void Start()
         {
             Started?.Invoke(this , new StepEventArgs(this));
         }
