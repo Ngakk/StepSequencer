@@ -86,3 +86,6 @@
  
 1.2.9
  - Step Started event can be delayed and called manually if OnEnable is overriden.
+ 
+1.2.10
+ - Fixing an error in previous update making it so that inheriting from Step and making a Start method would prevent the Started event from being called
