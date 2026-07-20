@@ -1,2 +1,2 @@
 # StepSequencer
-Step Sequencer scripts for reuse in NSL projects
+Step Sequencer scripts for reuse in training projects.
